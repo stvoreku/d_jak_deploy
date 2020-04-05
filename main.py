@@ -29,11 +29,11 @@ def get_all():
 @app.get('/patient/{pk}')
 async def method_get(pk: int):
     # try:
-    #     patient = data[pk]
+    patient = data[pk]
     # except IndexError:
     #     raise HTTPException(status_code=204, detail="Content not found")
     # return {"name": patient.name, "surename": patient.surename}
-    return {'id': pk}
+    return {'id': patient}
 
 @app.post('/patient')
 async def method_post(patient: Patient):
