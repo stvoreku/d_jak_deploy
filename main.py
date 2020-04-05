@@ -4,4 +4,4 @@ app = FastAPI()
 
 @app.get('/')
 def hello_world():
-    return {'hi': 'world'}
+    return {"message": "Hello World during the coronavirus pandemic!"}
