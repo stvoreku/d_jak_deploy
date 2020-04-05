@@ -1,6 +1,11 @@
 from fastapi import FastAPI
-
+import json
 app = FastAPI()
+with open('json_data', 'w') as file:
+    try:
+        data = json.load(file.read)
+    except:
+        data = []
 
 @app.get('/')
 def hello_world():
@@ -13,6 +18,7 @@ def method_get():
 
 @app.post('/method')
 def method_post():
+
     return {"method":"POST"}
 
 @app.put('/method')
