@@ -8,6 +8,7 @@ class Patient(BaseModel):
     surename: str
 
 
+
 with open('json_data', 'w') as file:
     try:
         data = json.load(file.read)
@@ -20,9 +21,10 @@ def hello_world():
     return {"message": "Hello World during the coronavirus pandemic!"}
 
 
-@app.get('/patient')
-def method_get():
-    return {"data":data}
+@app.get('/patient/{pk}')
+async def method_get(pk: int):
+    patient = data[pk]
+    return {"name": patient.name, "surename": patient.surename}
 
 @app.post('/patient')
 async def method_post(patient: Patient):
