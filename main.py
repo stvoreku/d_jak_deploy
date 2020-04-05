@@ -1,4 +1,4 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, HTTPException
 import json
 app = FastAPI()
 from pydantic import BaseModel
@@ -23,7 +23,10 @@ def hello_world():
 
 @app.get('/patient/{pk}')
 async def method_get(pk: int):
-    patient = data[pk]
+    try:
+        patient = data[pk]
+    except IndexError:
+        raise HTTPException(status_code=404, detail="Item not found")
     return {"name": patient.name, "surename": patient.surename}
 
 @app.post('/patient')
