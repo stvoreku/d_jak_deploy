@@ -37,6 +37,7 @@ async def method_get(pk: int):
 
 @app.post('/patient')
 async def method_post(patient: Patient):
+    temp_num = len(data)
     data.append({'name': patient.name, 'surename': patient.surename})
     USER_NUM = len(data)
-    return {"id":USER_NUM-1, "patient": {"name":patient.name, "surename":patient.surename}}
+    return {"id":temp_num, "patient": {"name":patient.name, "surename":patient.surename}}
