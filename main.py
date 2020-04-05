@@ -32,7 +32,7 @@ async def method_get(pk: int):
         patient = data[pk]
     except IndexError:
         raise HTTPException(status_code=204, detail="Content not found")
-    return {"name": patient.name, "surename": patient.surename}
+    return {patient}
 
 @app.post('/patient')
 async def method_post(patient: Patient):
