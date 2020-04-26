@@ -20,8 +20,8 @@ def welcome(SESSION_TOKEN: str = Cookie(None)):
     return {'msg':SESSION_TOKEN}
 
 @app.post('/login')
-def login(user: str, password: str, response: Response):
-    if decode(USER_HASH) == encode(user, password):
+def login(login: str, pass: str, response: Response):
+    if decode(USER_HASH) == encode(login, pass):
         #SESSION_TOKEN = sha256(bytes(f"{USER_HASH}{app.secret_key}")).hexdigest()
         #response.set_cookie(key="SESSION_TOKEN", value=SESSION_TOKEN)
         return RedirectResponse('/welcome')
