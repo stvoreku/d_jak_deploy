@@ -98,7 +98,7 @@ async def method_get(pk: int, session_token: str = Cookie(None)):
 @app.post('/patient')
 async def method_post(patient: Patient):
     temp_num = len(data)
-    print(patient)
+    print("DODAJE", patient, "JAKO", len(data))
     data.append({'name': patient.name, 'surname': patient.surname})
     response = RedirectResponse(url='/patient/{}'.format(temp_num))
     USER_NUM = len(data)
@@ -108,6 +108,7 @@ async def method_post(patient: Patient):
 def delete_patient(pk: int, session_token: str = Cookie(None)):
     check_session(session_token)
     try:
+        print("Trying deletion")
         print(data[pk])
         del data[pk]
     except IndexError:
