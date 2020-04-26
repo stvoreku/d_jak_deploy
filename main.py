@@ -101,7 +101,7 @@ async def method_post(patient: Patient):
     data.append({'name': patient.name, 'surname': patient.surname})
     USER_NUM = len(data)
     response = RedirectResponse(url='/patient/{}'.format(USER_NUM))
-    response.status_code = status.HTTP_200_OK
+    response.status_code = status.HTTP_302_FOUND
     return response
 @app.delete('/patient/{pk}')
 def delete_patient(pk: int, session_token: str = Cookie(None)):
