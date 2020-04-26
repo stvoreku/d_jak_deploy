@@ -31,7 +31,9 @@ def get_current_username(credentials: HTTPBasicCredentials = Depends(security)):
             detail="Incorrect email or password",
             headers={"WWW-Authenticate": "Basic"},
         )
-    return RedirectResponse('/welcome')
+    response = RedirectResponse('/welcome')
+    response.status_code = status.HTTP_307_TEMPORARY_REDIRECT
+    return response
 
 
 @app.post('/login')
