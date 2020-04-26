@@ -80,7 +80,7 @@ USER_NUM = len(data)
 @app.get('/patient')
 def get_all(session_token: str = Cookie(None)):
     check_session(session_token)
-    return (data)
+    return data
 
 
 
