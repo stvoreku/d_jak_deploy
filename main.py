@@ -46,8 +46,8 @@ async def method_post(patient: Patient):
     return {"id":temp_num, "patient": {"name":patient.name, "surename":patient.surename}}
 
 @app.get('/welcome')
-def welcome():
-    return {'msg':'wilkomenn'}
+def welcome(id: str = Cookie(None)):
+    return {'msg':id}
 
 @app.post('/login/')
 def login(user: str, password: str, response: Response):
