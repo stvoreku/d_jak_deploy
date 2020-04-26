@@ -33,7 +33,7 @@ def get_login(credentials: HTTPBasicCredentials = Depends(security)):
     #session_token = 'supertajnytoken'
     session_token = sha256(bytes(f"{credentials.password}{app.secret_key}", encoding='utf8')).hexdigest()
     print(session_token)
-    app.sessions[credentials.username] = session_token
+    app.sessions[session_token] = credentials.username
     return session_token
 
 
