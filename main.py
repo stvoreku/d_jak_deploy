@@ -1,13 +1,15 @@
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, Response, Cookie, HTTPException
 import json
-app = FastAPI()
+from hashlib import sha256
+from basicauth import encode, decode
 from pydantic import BaseModel
 
+USER_HASH = "Basic bG9naW46cGFzc3dvcmQ=" "#TB Stored in DB
 class Patient(BaseModel):
     name: str
     surename: str
 
-
+app = FastAPI()
 
 with open('json_data', 'w') as file:
     try:
@@ -45,6 +47,11 @@ async def method_post(patient: Patient):
 def welcome():
     return {'msg':'wilkomenn'}
 
-@app.get('/login')
-def login():
-    raise HTTPException(status_code=403, detail="Forbidden")
+@app.post('/login/')
+def login(user: str, password: str, response: Response):
+    if decode(USER_HASH) == encode(user, password):
+        session_token = sha256(bytes(f"{USER_HASH}{app.secret_key}")).hexdigest()
+        response.set_cookie(key="session_token", value=session_token)
+        return {"message": "Welcome"}
+    else:
+        raise HTTPException(status_code=401, detail="Unauthorized")
