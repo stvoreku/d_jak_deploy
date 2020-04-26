@@ -1,15 +1,15 @@
-from fastapi import FastAPI, Response, Cookie, HTTPException
+from fastapi import FastAPI, Response, Cookie, HTTPException,Depends
 from starlette.responses import RedirectResponse
 from hashlib import sha256
 from basicauth import encode, decode
 from pydantic import BaseModel
-
+from fastapi.security import HTTPBasic, HTTPBasicCredentials
 USER_HASH = "Basic dHJ1ZG5ZOlBhQzEzTnQ=" #TB Stored in DB
 SESSION_TOKEN = ''
 
 app = FastAPI()
 app.secret_key = 'dlugi tajny klucz wszedl na plot i mruga'
-
+security = HTTPBasic()
 
 @app.get('/')
 def hello_world():
@@ -20,5 +20,5 @@ def welcome(SESSION_TOKEN: str = Cookie(None)):
     raise HTTPException(status_code=401, detail="Unauthorized")
 
 @app.post('/login')
-def login(response: Response):
-    raise HTTPException(status_code=401, detail="Unauthorized")
+def login(credentials: HTTPBasicCredentials = Depends(security)):
+    return {"username": credentials.username, "password": credentials.password}
