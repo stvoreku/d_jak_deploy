@@ -16,7 +16,7 @@ security = HTTPBasic()
 def hello_world():
     return {"message": "Hello World during the coronavirus pandemic!"}
 
-@app.post('/welcome')
+@app.get('/welcome')
 def welcome(session_token: str = Cookie(None)):
     if session_token == SESSION_TOKEN:
         return "helol"
@@ -39,6 +39,6 @@ def get_current_username(credentials: HTTPBasicCredentials = Depends(security)):
 @app.post('/login')
 def login(credentials: HTTPBasicCredentials = Depends(security)):
     response = RedirectResponse(url='/welcome')
-    response.status_code = status.HTTP_307_TEMPORARY_REDIRECT
+    response.status_code = status.HTTP_302_FOUND
     response.set_cookie(key="session_token", value=SESSION_TOKEN)
     return response
