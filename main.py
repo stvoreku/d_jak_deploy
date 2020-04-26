@@ -20,6 +20,7 @@ def hello_world():
 def welcome(session_token: str = Cookie(None)):
     if session_token == SESSION_TOKEN:
         return "helol"
+    print(session_token, SESSION_TOKEN)
     raise HTTPException(status_code=401, detail="Unauthorized")
 
 
