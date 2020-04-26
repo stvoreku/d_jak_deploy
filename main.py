@@ -2,6 +2,7 @@ from fastapi import FastAPI, Response, Cookie, HTTPException,Depends, status
 from starlette.responses import RedirectResponse
 from hashlib import sha256
 from pydantic import BaseModel
+import json
 import secrets
 from fastapi.security import HTTPBasic, HTTPBasicCredentials
 
@@ -9,6 +10,13 @@ app = FastAPI()
 app.secret_key = 'dlugi tajny klucz wszedl na plot i mruga'
 security = HTTPBasic()
 app.sessions = {}
+
+
+class Patient(BaseModel):
+    name: str
+    surename: str
+
+
 @app.get('/')
 def hello_world():
     return {"message": "Hello World during the coronavirus pandemic!"}
@@ -43,3 +51,34 @@ def login(session_token: str = Depends(get_login)):
     response.status_code = status.HTTP_302_FOUND
     response.set_cookie(key="session_token", value=session_token)
     return response
+
+
+
+### OLD METHODS
+with open('json_data', 'w') as file:
+    try:
+        data = json.load(file.read)
+    except:
+        data = []
+USER_NUM = len(data)
+
+
+@app.get('/patient')
+def get_all():
+    return(data)
+
+
+@app.get('/patient/{pk}')
+async def method_get(pk: int):
+    try:
+        patient = data[pk]
+    except IndexError:
+        raise HTTPException(status_code=204, detail="Content not found")
+    return patient
+
+@app.post('/patient')
+async def method_post(patient: Patient):
+    temp_num = len(data)
+    data.append({'name': patient.name, 'surename': patient.surename})
+    USER_NUM = len(data)
+    return {"id":temp_num, "patient": {"name":patient.name, "surename":patient.surename}}
