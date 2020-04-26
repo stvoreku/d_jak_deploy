@@ -5,7 +5,7 @@ from hashlib import sha256
 from basicauth import encode, decode
 from pydantic import BaseModel
 
-USER_HASH = "Basic bG9naW46cGFzc3dvcmQ=" "#TB Stored in DB
+USER_HASH = "Basic dHJ1ZG5ZOlBhQzEzTnQ=" #TB Stored in DB
 class Patient(BaseModel):
     name: str
     surename: str
