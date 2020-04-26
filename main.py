@@ -6,6 +6,7 @@ from basicauth import encode, decode
 from pydantic import BaseModel
 
 USER_HASH = "Basic dHJ1ZG5ZOlBhQzEzTnQ=" #TB Stored in DB
+SESSION_TOKEN = ''
 class Patient(BaseModel):
     name: str
     surename: str
@@ -51,8 +52,8 @@ def welcome():
 @app.post('/login/')
 def login(user: str, password: str, response: Response):
     if decode(USER_HASH) == encode(user, password):
-        session_token = sha256(bytes(f"{USER_HASH}{app.secret_key}")).hexdigest()
-        response.set_cookie(key="session_token", value=session_token)
+        SESSION_TOKEN = sha256(bytes(f"{USER_HASH}{app.secret_key}")).hexdigest()
+        response.set_cookie(key="SESSION_TOKEN", value=SESSION_TOKEN)
         return RedirectResponse('/welcome')
     else:
         raise HTTPException(status_code=401, detail="Unauthorized")
