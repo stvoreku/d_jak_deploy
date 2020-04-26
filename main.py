@@ -40,3 +40,7 @@ async def method_post(patient: Patient):
     data.append({'name': patient.name, 'surename': patient.surename})
     USER_NUM = len(data)
     return {"id":temp_num, "patient": {"name":patient.name, "surename":patient.surename}}
+
+@app.get('/welcome')
+def welcome():
+    return {'msg':'wilkomenn'}
