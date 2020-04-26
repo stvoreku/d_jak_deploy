@@ -38,7 +38,6 @@ def get_login(credentials: HTTPBasicCredentials = Depends(security)):
             detail="Incorrect email or password",
             headers={"WWW-Authenticate": "Basic"},
         )
-    #session_token = 'supertajnytoken'
     session_token = sha256(bytes(f"{credentials.password}{app.secret_key}", encoding='utf8')).hexdigest()
     print('token created: ', session_token)
     app.sessions[session_token] = credentials.username
@@ -64,8 +63,12 @@ USER_NUM = len(data)
 
 
 @app.get('/patient')
-def get_all():
-    return(data)
+def get_all(session_token: str = Cookie(None)):
+    print('welcome, checking session', session_token, 'spodziewany:', app.sessions)
+    if session_token in app.sessions.keys():
+        return (data)
+    raise HTTPException(status_code=401, detail="Unauthorized")
+
 
 
 @app.get('/patient/{pk}')
