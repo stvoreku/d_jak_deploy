@@ -18,6 +18,7 @@ def hello_world():
 
 @app.get('/welcome')
 def welcome(SESSION_TOKEN: str = Cookie(None)):
+    return "helol"
     raise HTTPException(status_code=401, detail="Unauthorized")
 
 
