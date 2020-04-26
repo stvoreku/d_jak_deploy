@@ -44,3 +44,7 @@ async def method_post(patient: Patient):
 @app.get('/welcome')
 def welcome():
     return {'msg':'wilkomenn'}
+
+@app.get('/login')
+def login():
+    raise HTTPException(status_code=403, detail="Forbidden")
