@@ -43,6 +43,11 @@ def get_login(credentials: HTTPBasicCredentials = Depends(security)):
     app.sessions[session_token] = credentials.username
     return session_token
 
+def check_session(token):
+    if token in app.sessions.keys():
+        return app.sessions[token]
+    else:
+        raise HTTPException(status_code=401, detail="Unauthorized")
 
 @app.post('/login')
 def login(session_token: str = Depends(get_login)):
@@ -51,7 +56,14 @@ def login(session_token: str = Depends(get_login)):
     response.set_cookie(key="session_token", value=session_token)
     return response
 
-
+@app.post('/logout')
+def logout(session_token: str = Cookie(None)):
+    check_session(session_token)
+    del app.sessions[session_token]
+    response = RedirectResponse(url='/welcome')
+    response.status_code = status.HTTP_302_FOUND
+    response.set_cookie(key="session_token", value='')
+    return response
 
 ### OLD METHODS
 with open('json_data', 'w') as file:
@@ -64,15 +76,15 @@ USER_NUM = len(data)
 
 @app.get('/patient')
 def get_all(session_token: str = Cookie(None)):
-    print('welcome, checking session', session_token, 'spodziewany:', app.sessions)
-    if session_token in app.sessions.keys():
-        return (data)
-    raise HTTPException(status_code=401, detail="Unauthorized")
+    check_session(session_token)
+    return (data)
+
 
 
 
 @app.get('/patient/{pk}')
-async def method_get(pk: int):
+async def method_get(pk: int, session_token: str = Cookie(None) ):
+    check_session(session_token)
     try:
         patient = data[pk]
     except IndexError:
