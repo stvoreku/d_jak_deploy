@@ -17,7 +17,7 @@ app.sessions = {}
 
 class Patient(BaseModel):
     name: str
-    surename: str
+    surname: str
 
 
 @app.get('/')
