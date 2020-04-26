@@ -1,11 +1,14 @@
-from fastapi import FastAPI, Response, Cookie, HTTPException,Depends, status
+from fastapi import FastAPI, Response, Cookie, HTTPException,Depends, status, Request
 from starlette.responses import RedirectResponse
 from hashlib import sha256
 from pydantic import BaseModel
 import json
 import secrets
 from fastapi.security import HTTPBasic, HTTPBasicCredentials
+from fastapi.templating import Jinja2Templates
 
+
+templates = Jinja2Templates(directory="templates")
 app = FastAPI()
 app.secret_key = 'dlugi tajny klucz wszedl na plot i mruga'
 security = HTTPBasic()
@@ -22,10 +25,10 @@ def hello_world():
     return {"message": "Hello World during the coronavirus pandemic!"}
 
 @app.get('/welcome')
-def welcome(session_token: str = Cookie(None)):
+def welcome(request: Request, session_token: str = Cookie(None)):
     print('welcome, checking session', session_token, 'spodziewany:', app.sessions)
     if session_token in app.sessions.keys():
-        return "hello {}".format(app.sessions[session_token])
+        return templates.TemplateResponse("welcomen.html", {"request": request, "user": app.sessions[session_token]})
     raise HTTPException(status_code=401, detail="Unauthorized")
 
 
