@@ -37,7 +37,7 @@ def get_login(credentials: HTTPBasicCredentials = Depends(security)):
 
 
 @app.post('/login')
-def login(user: str, session_token: str = Depends(get_login)):
+def login(user, session_token: str = Depends(get_login)):
     response = RedirectResponse(url='/welcome')
     response.status_code = status.HTTP_302_FOUND
     app.session[session_token] = user
