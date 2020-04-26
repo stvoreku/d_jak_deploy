@@ -4,22 +4,20 @@ from hashlib import sha256
 from pydantic import BaseModel
 import secrets
 from fastapi.security import HTTPBasic, HTTPBasicCredentials
-USER_HASH = "Basic dHJ1ZG5ZOlBhQzEzTnQ=" #TB Stored in DB
-SESSION_TOKEN = ''
 
 app = FastAPI()
 app.secret_key = 'dlugi tajny klucz wszedl na plot i mruga'
 security = HTTPBasic()
-app.session = ''
+app.sessions = {}
 @app.get('/')
 def hello_world():
     return {"message": "Hello World during the coronavirus pandemic!"}
 
 @app.get('/welcome')
 def welcome(session_token: str = Cookie(None)):
-    print('welcome, checking session', session_token, 'spodziewany:', app.session)
-    if session_token == app.session:
-        return "helol"
+    print('welcome, checking session', session_token, 'spodziewany:', app.sessions)
+    if session_token in app.sessions.keys():
+        return "hello {}".format(app.sessions[session_token])
     raise HTTPException(status_code=401, detail="Unauthorized")
 
 
@@ -32,15 +30,16 @@ def get_login(credentials: HTTPBasicCredentials = Depends(security)):
             detail="Incorrect email or password",
             headers={"WWW-Authenticate": "Basic"},
         )
-    session_token = 'supertajnytoken'
+    #session_token = 'supertajnytoken'
+    session_token = sha256(bytes(f"{credentials.password}{app.secret_key}", encoding='utf8')).hexdigest()
     print(session_token)
-    return session_token
+    return credentials.username, session_token
 
 
 @app.post('/login')
-def login(session_token: str = Depends(get_login)):
+def login(user: str, session_token: str = Depends(get_login)):
     response = RedirectResponse(url='/welcome')
     response.status_code = status.HTTP_302_FOUND
-    app.session = session_token
+    app.session[session_token] = user
     response.set_cookie(key="session_token", value=session_token)
     return response
