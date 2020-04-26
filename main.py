@@ -36,6 +36,6 @@ def get_current_username(credentials: HTTPBasicCredentials = Depends(security)):
 @app.post('/login')
 def login(credentials: HTTPBasicCredentials = Depends(security)):
     response = RedirectResponse(url='/welcome')
-    response.status_code = status.HTTP_302_FOUND
+    response.status_code = status.HTTP_307_TEMPORARY_REDIRECT
     response.set_cookie(key="session_token", value=SESSION_TOKEN)
     return response
