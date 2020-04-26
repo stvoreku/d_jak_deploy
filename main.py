@@ -20,5 +20,5 @@ def welcome(SESSION_TOKEN: str = Cookie(None)):
     raise HTTPException(status_code=401, detail="Unauthorized")
 
 @app.post('/login')
-def login(login: str, password: str, response: Response):
+def login(response: Response):
     raise HTTPException(status_code=401, detail="Unauthorized")
