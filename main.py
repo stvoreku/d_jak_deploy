@@ -60,7 +60,7 @@ def login(session_token: str = Depends(get_login)):
 def logout(session_token: str = Cookie(None)):
     check_session(session_token)
     del app.sessions[session_token]
-    response = RedirectResponse(url='/welcome')
+    response = RedirectResponse(url='/')
     response.status_code = status.HTTP_302_FOUND
     response.set_cookie(key="session_token", value='')
     return response
@@ -83,7 +83,7 @@ def get_all(session_token: str = Cookie(None)):
 
 
 @app.get('/patient/{pk}')
-async def method_get(pk: int, session_token: str = Cookie(None) ):
+async def method_get(pk: int, session_token: str = Cookie(None)):
     check_session(session_token)
     try:
         patient = data[pk]
