@@ -33,9 +33,12 @@ def get_current_username(credentials: HTTPBasicCredentials = Depends(security)):
         )
     response = RedirectResponse('/welcome')
     response.status_code = status.HTTP_307_TEMPORARY_REDIRECT
-    return response
+    return credentials.username
 
 
 @app.post('/login')
 def login(credentials: HTTPBasicCredentials = Depends(security)):
-    return {"username": credentials.username, "password": credentials.password}
+
+    response = RedirectResponse('/welcome')
+    response.status_code = status.HTTP_307_TEMPORARY_REDIRECT
+    return response
