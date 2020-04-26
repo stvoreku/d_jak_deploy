@@ -10,7 +10,7 @@ SESSION_TOKEN = ''
 app = FastAPI()
 app.secret_key = 'dlugi tajny klucz wszedl na plot i mruga'
 security = HTTPBasic()
-
+app.users = {"trudnY": "PaC13Nt",
 @app.get('/')
 def hello_world():
     return {"message": "Hello World during the coronavirus pandemic!"}
