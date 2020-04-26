@@ -12,7 +12,7 @@ class Patient(BaseModel):
     surename: str
 
 app = FastAPI()
-
+app.secret_key = 'dlugi tajny klucz wszedl na plot i mruga'
 with open('json_data', 'w') as file:
     try:
         data = json.load(file.read)
