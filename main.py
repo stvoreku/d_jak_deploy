@@ -31,7 +31,7 @@ def get_current_username(credentials: HTTPBasicCredentials = Depends(security)):
             detail="Incorrect email or password",
             headers={"WWW-Authenticate": "Basic"},
         )
-    return credentials.username
+    return RedirectResponse('/welcome')
 
 
 @app.post('/login')
