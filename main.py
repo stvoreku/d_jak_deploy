@@ -12,7 +12,6 @@ app = FastAPI()
 app.secret_key = 'dlugi tajny klucz wszedl na plot i mruga'
 security = HTTPBasic()
 
-
 @app.get('/')
 def hello_world():
     return {"message": "Hello World during the coronavirus pandemic!"}
@@ -31,14 +30,9 @@ def get_current_username(credentials: HTTPBasicCredentials = Depends(security)):
             detail="Incorrect email or password",
             headers={"WWW-Authenticate": "Basic"},
         )
-    response = RedirectResponse('/welcome')
-    response.status_code = status.HTTP_307_TEMPORARY_REDIRECT
     return credentials.username
 
 
 @app.post('/login')
 def login(credentials: HTTPBasicCredentials = Depends(security)):
-
-    response = RedirectResponse('/welcome')
-    response.status_code = status.HTTP_307_TEMPORARY_REDIRECT
-    return response
+    return {"username": credentials.username, "password": credentials.password}
