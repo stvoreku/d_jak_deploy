@@ -6,7 +6,7 @@ from pydantic import BaseModel
 import secrets
 from fastapi.security import HTTPBasic, HTTPBasicCredentials
 USER_HASH = "Basic dHJ1ZG5ZOlBhQzEzTnQ=" #TB Stored in DB
-SESSION_TOKEN = ''
+SESSION_TOKEN = 'tajnytoken'
 
 app = FastAPI()
 app.secret_key = 'dlugi tajny klucz wszedl na plot i mruga'
@@ -35,4 +35,7 @@ def get_current_username(credentials: HTTPBasicCredentials = Depends(security)):
 
 @app.post('/login')
 def login(credentials: HTTPBasicCredentials = Depends(security)):
-    return {"username": credentials.username, "password": credentials.password}
+    response = RedirectResponse(url='/welcome')
+    response.status_code = status.HTTP_302_FOUND
+    response.set_cookie(key="session_token", value=SESSION_TOKEN)
+    return response
