@@ -17,8 +17,9 @@ def hello_world():
     return {"message": "Hello World during the coronavirus pandemic!"}
 
 @app.get('/welcome')
-def welcome(SESSION_TOKEN: str = Cookie(None)):
-    return "helol"
+def welcome(session_token: str = Cookie(None)):
+    if session_token == SESSION_TOKEN:
+        return "helol"
     raise HTTPException(status_code=401, detail="Unauthorized")
 
 
