@@ -98,7 +98,7 @@ async def method_get(pk: int, session_token: str = Cookie(None)):
 async def method_post(patient: Patient):
     temp_num = len(data)
     print(patient)
-    data.append({'name': patient.name, 'surename': patient.surename})
+    data.append({'name': patient.name, 'surname': patient.surname})
     USER_NUM = len(data)
     response = RedirectResponse(url='/patient/{}'.format(USER_NUM))
     response.status_code = status.HTTP_200_OK
