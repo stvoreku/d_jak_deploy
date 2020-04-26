@@ -1,4 +1,5 @@
 from fastapi import FastAPI, Response, Cookie, HTTPException
+from starlette.responses import RedirectResponse
 import json
 from hashlib import sha256
 from basicauth import encode, decode
@@ -52,6 +53,6 @@ def login(user: str, password: str, response: Response):
     if decode(USER_HASH) == encode(user, password):
         session_token = sha256(bytes(f"{USER_HASH}{app.secret_key}")).hexdigest()
         response.set_cookie(key="session_token", value=session_token)
-        return {"message": "Welcome"}
+        return RedirectResponse('/welcome')
     else:
         raise HTTPException(status_code=401, detail="Unauthorized")
