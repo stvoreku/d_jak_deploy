@@ -16,7 +16,7 @@ security = HTTPBasic()
 def hello_world():
     return {"message": "Hello World during the coronavirus pandemic!"}
 
-@app.get('/welcome')
+@app.post('/welcome')
 def welcome(session_token: str = Cookie(None)):
     if session_token == SESSION_TOKEN:
         return "helol"
