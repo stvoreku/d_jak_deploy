@@ -1,6 +1,5 @@
 from fastapi import FastAPI, Response, Cookie, HTTPException
 from starlette.responses import RedirectResponse
-import json
 from hashlib import sha256
 from basicauth import encode, decode
 from pydantic import BaseModel
@@ -11,12 +10,6 @@ SESSION_TOKEN = ''
 app = FastAPI()
 app.secret_key = 'dlugi tajny klucz wszedl na plot i mruga'
 
-with open('json_data', 'w') as file:
-    try:
-        data = json.load(file.read)
-    except:
-        data = []
-USER_NUM = len(data)
 
 @app.get('/')
 def hello_world():

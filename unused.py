@@ -1,4 +1,12 @@
 
+with open('json_data', 'w') as file:
+    try:
+        data = json.load(file.read)
+    except:
+        data = []
+USER_NUM = len(data)
+
+
 @app.get('/patient')
 def get_all():
     return(data)
