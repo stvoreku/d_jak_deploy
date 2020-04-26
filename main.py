@@ -10,15 +10,15 @@ SESSION_TOKEN = ''
 app = FastAPI()
 app.secret_key = 'dlugi tajny klucz wszedl na plot i mruga'
 security = HTTPBasic()
-
+app.session = ''
 @app.get('/')
 def hello_world():
     return {"message": "Hello World during the coronavirus pandemic!"}
 
 @app.get('/welcome')
 def welcome(session_token: str = Cookie(None)):
-    print('welcome, checking session', session_token, 'spodziewany:', SESSION_TOKEN)
-    if session_token == SESSION_TOKEN:
+    print('welcome, checking session', session_token, 'spodziewany:', app.session)
+    if session_token == app.session:
         return "helol"
     raise HTTPException(status_code=401, detail="Unauthorized")
 
@@ -41,6 +41,6 @@ def get_login(credentials: HTTPBasicCredentials = Depends(security)):
 def login(session_token: str = Depends(get_login)):
     response = RedirectResponse(url='/welcome')
     response.status_code = status.HTTP_302_FOUND
-    SESSION_TOKEN = session_token
+    app.session = session_token
     response.set_cookie(key="session_token", value=session_token)
     return response
