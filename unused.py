@@ -1,5 +1,4 @@
 
-
 @app.get('/patient')
 def get_all():
     return(data)
