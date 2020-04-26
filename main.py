@@ -40,5 +40,6 @@ def get_current_username(credentials: HTTPBasicCredentials = Depends(security)):
 def login(session_token: str = Depends(security)):
     response = RedirectResponse(url='/welcome')
     response.status_code = status.HTTP_302_FOUND
-    response.set_cookie(key="session_token", value=SESSION_TOKEN)
+    SESSION_TOKEN = session_token
+    response.set_cookie(key="session_token", value=session_token)
     return response
