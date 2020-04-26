@@ -32,7 +32,7 @@ def get_login(credentials: HTTPBasicCredentials = Depends(security)):
             detail="Incorrect email or password",
             headers={"WWW-Authenticate": "Basic"},
         )
-    session_token = sha256(bytes(f"{credentials.username}{credentials.password}")).hexdigest()
+    session_token = 'supertajnytoken'
     print(session_token)
     return session_token
 
