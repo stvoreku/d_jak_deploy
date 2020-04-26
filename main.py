@@ -97,6 +97,18 @@ async def method_get(pk: int, session_token: str = Cookie(None)):
 @app.post('/patient')
 async def method_post(patient: Patient):
     temp_num = len(data)
+    print(patient)
     data.append({'name': patient.name, 'surename': patient.surename})
     USER_NUM = len(data)
-    return {"id":temp_num, "patient": {"name":patient.name, "surename":patient.surename}}
+    response = RedirectResponse(url='/patient/{}'.format(USER_NUM))
+    response.status_code = status.HTTP_200_OK
+    return response
+@app.delete('/patient/{pk}')
+def delete_patient(pk: int, session_token: str = Cookie(None)):
+    check_session(session_token)
+    try:
+        print(data[pk])
+        del data[pk]
+    except IndexError:
+        raise HTTPException(status_code=204, detail="Content not found")
+    return "success"
