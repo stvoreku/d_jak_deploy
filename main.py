@@ -33,13 +33,13 @@ def get_login(credentials: HTTPBasicCredentials = Depends(security)):
     #session_token = 'supertajnytoken'
     session_token = sha256(bytes(f"{credentials.password}{app.secret_key}", encoding='utf8')).hexdigest()
     print(session_token)
-    return credentials.username, session_token
+    app.sessions[credentials.username] = session_token
+    return session_token
 
 
 @app.post('/login')
-def login(user, session_token: str = Depends(get_login)):
+def login(session_token: str = Depends(get_login)):
     response = RedirectResponse(url='/welcome')
     response.status_code = status.HTTP_302_FOUND
-    app.session[session_token] = user
     response.set_cookie(key="session_token", value=session_token)
     return response
