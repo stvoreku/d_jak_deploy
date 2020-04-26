@@ -88,6 +88,7 @@ def get_all(session_token: str = Cookie(None)):
 @app.get('/patient/{pk}')
 async def method_get(pk: int, session_token: str = Cookie(None)):
     check_session(session_token)
+    print("asked for {}, currently {}".format(pk, len(data)))
     try:
         patient = data[pk]
     except IndexError:
@@ -99,8 +100,8 @@ async def method_post(patient: Patient):
     temp_num = len(data)
     print(patient)
     data.append({'name': patient.name, 'surname': patient.surname})
+    response = RedirectResponse(url='/patient/{}'.format(temp_num))
     USER_NUM = len(data)
-    response = RedirectResponse(url='/patient/{}'.format(USER_NUM))
     response.status_code = status.HTTP_302_FOUND
     return response
 @app.delete('/patient/{pk}')
