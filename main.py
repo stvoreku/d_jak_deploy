@@ -79,8 +79,13 @@ USER_NUM = len(data)
 
 @app.get('/patient')
 def get_all(session_token: str = Cookie(None)):
+    print("asking for all patients,")
     check_session(session_token)
-    return data
+    jsonized = {}
+    for a in range(len(data)):
+        jsonized[a] = data[a]
+    print(jsonized)
+    return jsonized
 
 
 
@@ -116,3 +121,9 @@ def delete_patient(pk: int, session_token: str = Cookie(None)):
     response = Response
     response.status_code=status.HTTP_204_NO_CONTENT
     return response
+
+
+
+
+
+
