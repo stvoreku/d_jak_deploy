@@ -118,7 +118,7 @@ def delete_patient(pk: int, session_token: str = Cookie(None)):
         del data[pk]
     except IndexError:
         raise HTTPException(status_code=204, detail="Deleted earlier")
-    response = Response
+    response = Response()
     response.status_code=status.HTTP_204_NO_CONTENT
     return response
 
