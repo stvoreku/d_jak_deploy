@@ -27,14 +27,14 @@ def dict_factory(cursor, row):
 
 
 
-def get_tracks(page, per_page):
+def get_tracks():
     conn = sqlite3.connect('chinook.db')
     conn.row_factory = dict_factory
     c = conn.cursor()
     cmd = "SELECT * FROM tracks ORDER BY TrackID"
     c.execute(cmd)
     res = c.fetchall()
-    return res[(page-1)*per_page:(page-1)*per_page+per_page]
+    return res
 
 
 
@@ -45,9 +45,13 @@ class Patient(BaseModel):
 
 
 @app.get('/tracks')
-def tracks(page: int, per_page: int):
-    res = get_tracks(page, per_page)
-    return res
+def tracks(page: int = None , per_page: int = None):
+    res = get_tracks()
+    if page and per_page:
+        return res[(page-1)*per_page:(page-1)*per_page+per_page]
+    else:
+        return res
+
 @app.get('/')
 def hello_world():
     return {"message": "Hello World during the coronavirus pandemic!"}
