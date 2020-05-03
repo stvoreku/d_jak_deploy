@@ -6,6 +6,7 @@ import json
 import secrets
 from fastapi.security import HTTPBasic, HTTPBasicCredentials
 from fastapi.templating import Jinja2Templates
+import sqlite3
 
 
 templates = Jinja2Templates(directory="templates")
@@ -15,11 +16,38 @@ security = HTTPBasic()
 app.sessions = {}
 
 
+def dict_factory(cursor, row):
+    d = {}
+    for idx, col in enumerate(cursor.description):
+        d[col[0]] = row[idx]
+    return d
+
+
+
+
+
+
+def get_tracks(page, per_page):
+    conn = sqlite3.connect('chinook.db')
+    conn.row_factory = dict_factory
+    c = conn.cursor()
+    cmd = "SELECT * FROM tracks ORDER BY TrackID"
+    c.execute(cmd)
+    res = c.fetchall()
+    return res[(page-1)*per_page:(page-1)*per_page+per_page]
+
+
+
+
 class Patient(BaseModel):
     name: str
     surname: str
 
 
+@app.get('/tracks')
+def tracks(page: int, per_page: int):
+    res = get_tracks(page, per_page)
+    return res
 @app.get('/')
 def hello_world():
     return {"message": "Hello World during the coronavirus pandemic!"}
@@ -68,60 +96,8 @@ def logout(session_token: str = Cookie(None)):
     response.set_cookie(key="session_token", value='')
     return response
 
-### OLD METHODS
-with open('json_data', 'w') as file:
-    try:
-        data = json.load(file.read)
-    except:
-        data = []
-USER_NUM = len(data)
 
-
-@app.get('/patient')
-def get_all(session_token: str = Cookie(None)):
-    print("asking for all patients,")
-    check_session(session_token)
-    jsonized = {}
-    for a in range(len(data)):
-        jsonized[a] = data[a]
-    print(jsonized)
-    return jsonized
-
-
-
-
-@app.get('/patient/{pk}')
-async def method_get(pk: int, session_token: str = Cookie(None)):
-    check_session(session_token)
-    print("asked for {}, currently {}".format(pk, len(data)))
-    try:
-        patient = data[pk]
-    except IndexError:
-        raise HTTPException(status_code=204, detail="Content not found")
-    return patient
-
-@app.post('/patient')
-async def method_post(patient: Patient):
-    temp_num = len(data)
-    print("DODAJE", patient, "JAKO", len(data))
-    data.append({'name': patient.name, 'surname': patient.surname})
-    response = RedirectResponse(url='/patient/{}'.format(temp_num))
-    USER_NUM = len(data)
-    response.status_code = status.HTTP_302_FOUND
-    return response
-@app.delete('/patient/{pk}')
-def delete_patient(pk: int, session_token: str = Cookie(None)):
-    check_session(session_token)
-    try:
-        print("Trying deletion")
-        print(data[pk])
-        del data[pk]
-    except IndexError:
-        raise HTTPException(status_code=204, detail="Deleted earlier")
-    response = Response()
-    response.status_code=status.HTTP_204_NO_CONTENT
-    return response
-
+get_tracks()
 
 
 
