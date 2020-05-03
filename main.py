@@ -47,7 +47,7 @@ class Patient(BaseModel):
 @app.get('/tracks')
 def tracks(page: int = 0, per_page: int = 10):
     res = get_tracks()
-    if len(res > (page+1)) * per_page:
+    if len(res) > (page+1) * per_page:
         raise HTTPException(status_code=404)
     return res[page*per_page:page*per_page+per_page]
 
