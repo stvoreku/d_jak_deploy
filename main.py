@@ -45,9 +45,9 @@ class Patient(BaseModel):
 
 
 @app.get('/tracks')
-def tracks(page: int = 0 , per_page: int = 10):
+def tracks(page: int = 0, per_page: int = 10):
     res = get_tracks()
-    return res[(page-1)*per_page:(page-1)*per_page+per_page]
+    return res[page*per_page:page*per_page+per_page]
 
 @app.get('/')
 def hello_world():
