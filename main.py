@@ -36,12 +36,27 @@ def get_tracks():
     res = c.fetchall()
     return res
 
-
+def get_composer_tracks(name):
+    conn = sqlite3.connect('chinook.db')
+    c = conn.cursor()
+    cmd = "SELECT Name FROM tracks WHERE Composer = ? ORDER BY TrackID"
+    c.execute(cmd, (name, ))
+    res_raw = c.fetchall()
+    res = [i for sub in res_raw for i in sub]
+    return res
 
 
 class Patient(BaseModel):
     name: str
     surname: str
+
+
+@app.get('tracks/composers')
+def comps(composer: str = None):
+    res = get_composer_tracks(composer)
+    if len(res) == 0:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="No Composer with given Name")
+    return res
 
 
 @app.get('/tracks')
@@ -50,6 +65,9 @@ def tracks(page: int = 0, per_page: int = 10):
     #if len(res) < (page+1) * per_page:
         #raise HTTPException(status_code=404)
     return res[page*per_page:page*per_page+per_page]
+
+
+
 
 @app.get('/')
 def hello_world():
@@ -98,8 +116,6 @@ def logout(session_token: str = Cookie(None)):
     response.status_code = status.HTTP_302_FOUND
     response.set_cookie(key="session_token", value='')
     return response
-
-
 
 
 
