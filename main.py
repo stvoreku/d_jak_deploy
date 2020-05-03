@@ -51,7 +51,7 @@ class Patient(BaseModel):
     surname: str
 
 
-@app.get('tracks/composers')
+@app.get('/tracks/composers')
 def comps(composer_name: str = None):
     res = get_composer_tracks(composer_name)
     if len(res) == 0:
@@ -120,3 +120,4 @@ def logout(session_token: str = Cookie(None)):
 
 
 
+print(comps("AC/DC"))
