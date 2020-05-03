@@ -116,8 +116,3 @@ def logout(session_token: str = Cookie(None)):
     response.status_code = status.HTTP_302_FOUND
     response.set_cookie(key="session_token", value='')
     return response
-
-
-
-
-print(comps("AC/DC"))
