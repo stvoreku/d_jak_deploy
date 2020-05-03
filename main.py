@@ -48,11 +48,12 @@ def get_composer_tracks(name):
 
 def add_album(artist_id, name):
     conn = sqlite3.connect('chinook.db')
+    conn.row_factory = dict_factory
     c = conn.cursor()
     cmd = "INSERT INTO albums (ArtistId, Title) VALUES (?, ?)"
     c.execute(cmd, (artist_id, name,))
 
-    conn.row_factory = dict_factory
+
     cmd = "SELECT * FROM albums WHERE Title = ? AND ArtistId = ?"
     c.execute(cmd, (name, artist_id,))
     res = c.fetchall()
