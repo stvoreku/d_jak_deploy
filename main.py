@@ -39,7 +39,7 @@ def get_tracks():
 def get_composer_tracks(name):
     conn = sqlite3.connect('chinook.db')
     c = conn.cursor()
-    cmd = "SELECT Name FROM tracks WHERE Composer = ? ORDER BY TrackID"
+    cmd = "SELECT Name FROM tracks WHERE Composer = ? ORDER BY Name"
     c.execute(cmd, (name, ))
     res_raw = c.fetchall()
     res = [i for sub in res_raw for i in sub]
