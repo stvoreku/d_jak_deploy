@@ -97,8 +97,6 @@ def logout(session_token: str = Cookie(None)):
     return response
 
 
-get_tracks()
-
 
 
 
