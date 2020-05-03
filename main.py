@@ -55,7 +55,7 @@ class Patient(BaseModel):
 def comps(composer_name: str = None):
     res = get_composer_tracks(composer_name)
     if len(res) == 0:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="No Composer with given Name")
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail={"error": "No Composer with given Name"})
     return res
 
 
