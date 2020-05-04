@@ -61,7 +61,7 @@ def add_album(artist_id, name):
 
     cmd = "SELECT * FROM albums WHERE Title = ? AND ArtistId = ?"
     c.execute(cmd, (name, artist_id,))
-    res = c.fetchall()
+    res = c.fetchone()
     return res
 
 @app.get('/tracks/composers')
