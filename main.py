@@ -58,7 +58,7 @@ def add_album(artist_id, name):
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail={"error": "No Artist with given id"})
     cmd = "INSERT INTO albums (ArtistId, Title) VALUES (?, ?)"
     c.execute(cmd, (artist_id, name,))
-
+    conn.commit()
     cmd = "SELECT * FROM albums WHERE Title = ? AND ArtistId = ?"
     c.execute(cmd, (name, artist_id,))
     res = c.fetchone()
@@ -69,6 +69,7 @@ def get_album(pk):
     c = conn.cursor()
     cmd = "SELECT * FROM albums WHERE AlbumId = ?"
     c.execute(cmd, (pk, ))
+    print(c.fetchall())
     return c.fetchone()
 
 @app.get('/tracks/composers')
@@ -108,4 +109,4 @@ def hello_world():
 
 
 
-print(add_album(21, "hells bells"))
+print(get_album(347))
