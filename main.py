@@ -50,9 +50,14 @@ def add_album(artist_id, name):
     conn = sqlite3.connect('chinook.db')
     conn.row_factory = dict_factory
     c = conn.cursor()
+    test_cmd = "SELECT COUNT(*) FROM artists WHERE ArtistId = ?"
+    c.execute(test_cmd, (artist_id,))
+    test_res = c.fetchone()
+    print(test_res['COUNT(*)'])
+    if test_res['COUNT(*)'] < 1:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail={"error": "No Artist with given id"})
     cmd = "INSERT INTO albums (ArtistId, Title) VALUES (?, ?)"
     c.execute(cmd, (artist_id, name,))
-
 
     cmd = "SELECT * FROM albums WHERE Title = ? AND ArtistId = ?"
     c.execute(cmd, (name, artist_id,))
@@ -93,4 +98,4 @@ def hello_world():
 
 
 
-print(add_album(1, "hells bells"))
+print(add_album(21, "hells bells"))
