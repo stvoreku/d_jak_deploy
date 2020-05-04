@@ -85,7 +85,7 @@ class Album(BaseModel):
     artist_id: str
 
 
-@app.post('/albums')
+@app.post('/albums', status_code=201)
 def post_albums(album: Album):
     res = add_album(album.artist_id, album.title)
     return res
