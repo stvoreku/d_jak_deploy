@@ -69,7 +69,7 @@ def get_album(pk):
     c = conn.cursor()
     cmd = "SELECT * FROM albums WHERE AlbumId = ?"
     c.execute(cmd, (pk, ))
-    print(c.fetchall())
+
     return c.fetchone()
 
 @app.get('/tracks/composers')
