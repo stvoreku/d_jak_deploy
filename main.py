@@ -63,6 +63,13 @@ def add_album(artist_id, name):
     c.execute(cmd, (name, artist_id,))
     res = c.fetchone()
     return res
+def get_album(pk):
+    conn = sqlite3.connect('chinook.db')
+    conn.row_factory = dict_factory
+    c = conn.cursor()
+    cmd = "SELECT * FROM albums WHERE AlbumId = ?"
+    c.execute(cmd, (pk, ))
+    return c.fetchone()
 
 @app.get('/tracks/composers')
 def comps(composer_name: str = None):
@@ -90,6 +97,9 @@ def post_albums(album: Album):
     res = add_album(album.artist_id, album.title)
     return res
 
+@app.get('/albums/{pk}')
+def get_albums(pk: int):
+    return get_album(pk)
 
 
 @app.get('/')
