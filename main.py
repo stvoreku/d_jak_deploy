@@ -48,12 +48,9 @@ class Customer(BaseModel):
     postalcode: str = None
     fax: str = None
 
-@app.put(/customers/{id})
+@app.put('/customers/{id}')
 def customers(id: int, customer: Customer):
     res = update_customer(id)
-
-
-
 
 
 @app.get('/')
