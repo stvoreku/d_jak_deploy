@@ -58,13 +58,12 @@ def update_customer(customer_id):
     test_res = c.fetchone()
     print(test_res['COUNT(*)'])
     if test_res['COUNT(*)'] < 1:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail={"error": "No Artist with given id"})
-    
-     cmd = "SELECT * FROM customers WHERE CustomerId = ?"
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail={"error": "No Artist with given id"})    
+    cmd = "SELECT * FROM customers WHERE CustomerId = ?"
     c.execute(cmd, (id, ))
     res = c.fetchone
     return res
-    
+
 class Customer(BaseModel):
     company: str = None
     address: str = None
