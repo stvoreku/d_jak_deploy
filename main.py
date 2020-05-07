@@ -24,31 +24,6 @@ def dict_factory(cursor, row):
     return d
 
 
-def add_album(artist_id, name):
-    conn = sqlite3.connect('chinook.db')
-    conn.row_factory = dict_factory
-    c = conn.cursor()
-    test_cmd = "SELECT COUNT(*) FROM artists WHERE ArtistId = ?"
-    c.execute(test_cmd, (artist_id,))
-    test_res = c.fetchone()
-    print(test_res['COUNT(*)'])
-    if test_res['COUNT(*)'] < 1:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail={"error": "No Artist with given id"})
-    cmd = "INSERT INTO albums (ArtistId, Title) VALUES (?, ?)"
-    c.execute(cmd, (artist_id, name,))
-    conn.commit()
-    cmd = "SELECT * FROM albums WHERE Title = ? AND ArtistId = ?"
-    c.execute(cmd, (name, artist_id,))
-    res = c.fetchone()
-    return res
-def get_album(pk):
-    conn = sqlite3.connect('chinook.db')
-    conn.row_factory = dict_factory
-    c = conn.cursor()
-    cmd = "SELECT * FROM albums WHERE AlbumId = ?"
-    c.execute(cmd, (pk, ))
-
-    return c.fetchone()
 def update_customer(customer_id):
     conn = sqlite3.connect('chinook.db')
     conn.row_factory = dict_factory
@@ -75,7 +50,7 @@ class Customer(BaseModel):
 
 @app.put(/customers/{id})
 def customers(id: int, customer: Customer):
-    res = 
+    res = update_customer(id)
 
 
 
