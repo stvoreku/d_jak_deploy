@@ -33,7 +33,7 @@ def update_customer(customer_id):
     test_res = c.fetchone()
     print(test_res['COUNT(*)'])
     if test_res['COUNT(*)'] < 1:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail={"error": "No Artist with given id"})    
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail={"error": "No Customer with given id"})
     cmd = "SELECT * FROM customers WHERE CustomerId = ?"
     c.execute(cmd, (customer_id, ))
     res = c.fetchone
@@ -51,6 +51,7 @@ class Customer(BaseModel):
 @app.put('/customers/{id}')
 def customers(id: int, customer: Customer):
     res = update_customer(id)
+    return res
 
 
 @app.get('/')
