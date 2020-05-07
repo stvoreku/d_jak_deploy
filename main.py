@@ -29,7 +29,7 @@ def update_customer(customer_id):
     conn.row_factory = dict_factory
     c = conn.cursor()
     test_cmd = "SELECT COUNT(*) FROM customers WHERE CustomerId = ?"
-    c.execute(test_cmd, (artist_id,))
+    c.execute(test_cmd, (customer_id,))
     test_res = c.fetchone()
     print(test_res['COUNT(*)'])
     if test_res['COUNT(*)'] < 1:
