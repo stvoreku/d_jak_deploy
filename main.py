@@ -56,7 +56,3 @@ def customers(id: int, customer: Customer):
 @app.get('/')
 def hello_world():
     return {"message": "Hello World during the coronavirus pandemic!"}
-
-
-
-print(get_album(347))
