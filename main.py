@@ -24,28 +24,6 @@ def dict_factory(cursor, row):
     return d
 
 
-
-
-
-
-def get_tracks():
-    conn = sqlite3.connect('chinook.db')
-    conn.row_factory = dict_factory
-    c = conn.cursor()
-    cmd = "SELECT * FROM tracks ORDER BY TrackID"
-    c.execute(cmd)
-    res = c.fetchall()
-    return res
-
-def get_composer_tracks(name):
-    conn = sqlite3.connect('chinook.db')
-    c = conn.cursor()
-    cmd = "SELECT Name FROM tracks WHERE Composer = ? ORDER BY Name"
-    c.execute(cmd, (name, ))
-    res_raw = c.fetchall()
-    res = [i for sub in res_raw for i in sub]
-    return res
-
 def add_album(artist_id, name):
     conn = sqlite3.connect('chinook.db')
     conn.row_factory = dict_factory
@@ -71,36 +49,37 @@ def get_album(pk):
     c.execute(cmd, (pk, ))
 
     return c.fetchone()
-
-@app.get('/tracks/composers')
-def comps(composer_name: str = None):
-    res = get_composer_tracks(composer_name)
-    if len(res) == 0:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail={"error": "No Composer with given Name"})
+def update_customer(customer_id):
+    conn = sqlite3.connect('chinook.db')
+    conn.row_factory = dict_factory
+    c = conn.cursor()
+    test_cmd = "SELECT COUNT(*) FROM customers WHERE CustomerId = ?"
+    c.execute(test_cmd, (artist_id,))
+    test_res = c.fetchone()
+    print(test_res['COUNT(*)'])
+    if test_res['COUNT(*)'] < 1:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail={"error": "No Artist with given id"})
+    
+     cmd = "SELECT * FROM customers WHERE CustomerId = ?"
+    c.execute(cmd, (id, ))
+    res = c.fetchone
     return res
+    
+class Customer(BaseModel):
+    company: str = None
+    address: str = None
+    city: str = None
+    state: str = None
+    country: str = None
+    postalcode: str = None
+    fax: str = None
+
+@app.put(/customers/{id})
+def customers(id: int, customer: Customer):
+    res = 
 
 
-@app.get('/tracks')
-def tracks(page: int = 0, per_page: int = 10):
-    res = get_tracks()
-    #if len(res) < (page+1) * per_page:
-        #raise HTTPException(status_code=404)
-    return res[page*per_page:page*per_page+per_page]
 
-
-class Album(BaseModel):
-    title: str
-    artist_id: str
-
-
-@app.post('/albums', status_code=201)
-def post_albums(album: Album):
-    res = add_album(album.artist_id, album.title)
-    return res
-
-@app.get('/albums/{pk}')
-def get_albums(pk: int):
-    return get_album(pk)
 
 
 @app.get('/')
