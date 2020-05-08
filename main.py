@@ -40,7 +40,7 @@ def sales(category: str):
     if category not in STATS.keys():
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail={'error':'no stats no cry'})
     res = STATS[category]
-    return res
+    return res()
 @app.get('/')
 def hello_world():
     return {"message": "Hello World during the coronavirus pandemic!"}
