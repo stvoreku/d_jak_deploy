@@ -26,15 +26,23 @@ def customer_sales():
     c.execute(cmd)
     return c.fetchall()
 
+def genres_sales():
+    conn = sqlite3.connect('chinook.db')
+    conn.row_factory = dict_factory
+    c = conn.cursor()
+    cmd = "SELECT genres.Name, COUNT(invoice_items.InvoiceId) as Sum FROM genres INNER JOIN tracks ON genres.GenreId = tracks.GenreId INNER JOIN invoice_items ON tracks.TrackId = invoice_items.TrackId GROUP BY genres.GenreId ORDER BY -Sum;"
+    c.execute(cmd)
+    return c.fetchall()
+
 @app.get('/sales')
 def sales(category: str):
-    ALLOWED_STATS = ['customers']
-    if category not in ALLOWED_STATS:
+    STATS = {'customers':customer_sales, 'genres':genres_sales}
+    if category not in STATS.keys():
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail={'error':'no stats no cry'})
-    res = customer_sales()
+    res = STATS[category]
     return res
 @app.get('/')
 def hello_world():
     return {"message": "Hello World during the coronavirus pandemic!"}
 
-print(customer_sales())
+print(genres_sales())
