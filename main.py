@@ -57,7 +57,7 @@ class Customer(BaseModel):
     fax: str = None
 
     def __str__(self):
-        print('joke is on you, im an object')
+        return('joke is on you, im an object')
 
 @app.put('/customers/{id}')
 def customers(id: int, customer: Customer):
