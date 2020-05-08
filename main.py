@@ -37,7 +37,7 @@ def update_customer(customer_id, customer):
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail={"error": "No Customer with given id"})
     upd_str = ''
     for key in customer.keys():
-        upd_str += '{} = {},'.format(key, customer[key])
+        upd_str += "{} = '{}',".format(key, customer[key])
     upd_str = upd_str[:-1]
     cmd = "UPDATE customers SET {} WHERE CustomerId = ?".format(upd_str)
     print(cmd)
