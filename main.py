@@ -22,12 +22,15 @@ def customer_sales():
     conn = sqlite3.connect('chinook.db')
     conn.row_factory = dict_factory
     c = conn.cursor()
-    cmd = "SELECT customers.CustomerId, SUM(invoices.Total) as TotalSpent FROM customers JOIN invoices ON customers.CustomerId = invoices.CustomerId GROUP BY Customers.CustomerId;"
+    cmd = "SELECT customers.CustomerId, customers.Email, customers.Phone, ROUND(SUM(invoices.Total),2) as Sum FROM customers JOIN invoices ON customers.CustomerId = invoices.CustomerId GROUP BY Customers.CustomerId ORDER BY -Sum;"
     c.execute(cmd)
     return c.fetchall()
 
 @app.get('/sales')
 def sales(category: str):
+    ALLOWED_STATS = ['customers']
+    if category not in ALLOWED_STATS:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail={'error':'no stats no cry'})
     res = customer_sales()
     return res
 @app.get('/')
