@@ -61,7 +61,7 @@ class Customer(BaseModel):
 
 @app.put('/customers/{id}')
 def customers(id: int, customer: Customer):
-    res = update_customer(id, customer)
+    res = update_customer(id, dict(customer))
     return res
 
 
