@@ -24,6 +24,7 @@ def customer_sales():
     c = conn.cursor()
     cmd = "SELECT CustomerId, Email, Phone FROM customers ORDER BY CustomerId"
     c.execute(cmd)
+    return c.fetchall()
 
 @app.get('/sales')
 def sales(category: str):
