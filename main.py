@@ -25,6 +25,7 @@ def dict_factory(cursor, row):
 
 
 def update_customer(customer_id, customer):
+    print(customer)
     conn = sqlite3.connect('chinook.db')
     conn.row_factory = dict_factory
     c = conn.cursor()
