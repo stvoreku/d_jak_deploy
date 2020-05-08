@@ -18,10 +18,16 @@ def dict_factory(cursor, row):
         d[col[0]] = row[idx]
     return d
 
+def customer_sales():
+    conn = sqlite3.connect('chinook.db')
+    conn.row_factory = dict_factory
+    c = conn.cursor()
+    cmd = "SELECT CustomerId, Email, Phone FROM customers ORDER BY CustomerId"
+    c.execute(cmd)
 
 @app.get('/sales')
 def sales(category: str):
-    res = category
+    res = customer_sales()
     return res
 @app.get('/')
 def hello_world():
