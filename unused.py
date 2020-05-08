@@ -1,3 +1,11 @@
+
+from starlette.responses import RedirectResponse
+from hashlib import sha256
+from pydantic import BaseModel
+import json
+import secrets
+
+
 ### OLD METHODS
 with open('json_data', 'w') as file:
     try:
@@ -5,6 +13,35 @@ with open('json_data', 'w') as file:
     except:
         data = []
 USER_NUM = len(data)
+
+def update_customer(customer_id, customer):
+    print(customer)
+    conn = sqlite3.connect('chinook.db')
+    conn.row_factory = dict_factory
+    c = conn.cursor()
+    test_cmd = "SELECT COUNT(*) FROM customers WHERE CustomerId = ?"
+    c.execute(test_cmd, (customer_id,))
+    test_res = c.fetchone()
+    if test_res['COUNT(*)'] < 1:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail={"error": "No Customer with given id"})
+    upd_str = ''
+    for key in customer.keys():
+        upd_str += "{} = '{}',".format(key, customer[key])
+    upd_str = upd_str[:-1]
+    cmd = "UPDATE customers SET {} WHERE CustomerId = ?".format(upd_str)
+    c.execute(cmd, (customer_id,))
+    cmd = "SELECT * FROM customers WHERE CustomerId = ?"
+    c.execute(cmd, (customer_id, ))
+    res = c.fetchone()
+    return res
+
+
+@app.put('/customers/{id}')
+def customers(id: int, customer: dict):
+    res = update_customer(id, customer)
+    return res
+
+
 
 def add_album(artist_id, name):
     conn = sqlite3.connect('chinook.db')
