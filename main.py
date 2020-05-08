@@ -30,7 +30,7 @@ def genres_sales():
     conn = sqlite3.connect('chinook.db')
     conn.row_factory = dict_factory
     c = conn.cursor()
-    cmd = "SELECT genres.Name, COUNT(invoice_items.InvoiceId) as Sum FROM genres INNER JOIN tracks ON genres.GenreId = tracks.GenreId INNER JOIN invoice_items ON tracks.TrackId = invoice_items.TrackId GROUP BY genres.GenreId ORDER BY -Sum;"
+    cmd = "SELECT genres.Name, COUNT(invoice_items.InvoiceId) as Sum FROM genres INNER JOIN tracks ON genres.GenreId = tracks.GenreId INNER JOIN invoice_items ON tracks.TrackId = invoice_items.TrackId GROUP BY genres.GenreId ORDER BY -Sum, genres.Name;"
     c.execute(cmd)
     return c.fetchall()
 
