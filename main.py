@@ -55,6 +55,9 @@ class Customer(BaseModel):
     postalcode: str = None
     fax: str = None
 
+    def __str__(self):
+        print('joke is on you, im an object')
+
 @app.put('/customers/{id}')
 def customers(id: int, customer: Customer):
     res = update_customer(id, customer)
