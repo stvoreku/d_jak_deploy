@@ -60,8 +60,8 @@ class Customer(BaseModel):
         return('joke is on you, im an object')
 
 @app.put('/customers/{id}')
-def customers(id: int, customer: Customer):
-    res = update_customer(id, dict(customer))
+def customers(id: int, customer: dict):
+    res = update_customer(id, customer)
     return res
 
 
