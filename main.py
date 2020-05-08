@@ -22,7 +22,7 @@ def customer_sales():
     conn = sqlite3.connect('chinook.db')
     conn.row_factory = dict_factory
     c = conn.cursor()
-    cmd = "SELECT CustomerId, Email, Phone FROM customers ORDER BY CustomerId"
+    cmd = "SELECT customers.CustomerId, SUM(invoices.Total) as TotalSpent FROM customers JOIN invoices ON customers.CustomerId = invoices.CustomerId GROUP BY Customers.CustomerId;"
     c.execute(cmd)
     return c.fetchall()
 
@@ -33,3 +33,5 @@ def sales(category: str):
 @app.get('/')
 def hello_world():
     return {"message": "Hello World during the coronavirus pandemic!"}
+
+print(customer_sales())
